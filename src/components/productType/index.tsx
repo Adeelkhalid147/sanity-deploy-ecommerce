@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const ProductType = () => {
   return (
-    <div className='py-16 px-2'>
+    <div className='py-16 px-2 space-y-5'>
       <div className='text-center space-y-3'>
         
           <p className='text-[#0062F5] text-xs font-bold'>PROMOTIONS</p>
@@ -63,7 +63,7 @@ const ProductType = () => {
           <p>USE PROMO CODE</p>
           <button 
           aria-label="Redirect user to Dine Week End Sale"
-          className="bg-button py-2 px-10 rounded-lg font-bold text-lg tracking-widest" >DINEWEEKENDSALE</button>
+          className="bg-button py-1 px-8 rounded-lg font-medium text-lg tracking-widest" >DINEWEEKENDSALE</button>
         </div>
 
       </div>
