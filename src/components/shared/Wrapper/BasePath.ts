@@ -1,5 +1,7 @@
 const BASE_PATH_FORAPI = process.env.NODE_ENV === "development" ?
- "http://localhost:3000" : "vercel deploy link paste here"
+ "http://localhost:3000" : "https://sanity-deploy.vercel.app"
+
+//  local host ya deploy hwa link attach ho ga server se 
 
 
 
