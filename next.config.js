@@ -8,10 +8,6 @@ const nextConfig = {
         port:"",
         pathname:"/**",
       },
-    ],
-  },
-  images: {
-    remotePatterns: [
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
@@ -20,6 +16,7 @@ const nextConfig = {
       },
     ],
   },
+  
 };
 
 module.exports = nextConfig;

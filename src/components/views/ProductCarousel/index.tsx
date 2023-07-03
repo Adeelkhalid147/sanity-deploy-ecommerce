@@ -8,50 +8,6 @@ import Slider from "react-slick";
 
 
 
-/* 
-export default class ProductCarousel extends Component<{
-  ProductData: Array<oneProductType>;
-}> {
-  render(): ReactNode{
-    const settings = {
-      speed: 500,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      centerMode:true,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          }
-        }
-      ]
-    };
-    return (
-      <Slider {...settings}>
-        {this.props.ProductData.map((item: oneProductType, index: number) => (
-          <Card key={index} singleProductData={item} />
-        ))}
-      </Slider>
-    );
-  }
-}
-
-
-// yha map ka function mai class use k hoe h jo k (this.) use krti h  
-// https://www.npmjs.com/package/react-slick se slider ko install kiya h or ye component 
-// bna bnya h jse chakra k component hte hai ya react icon k just copy paste krna hta
-// https://react-slick.neostack.com/docs/example/responsive/ responsiveness k liye ye
-// website se code lia h
-
-
-
-*/
-
-
-
-
 
 // slider use kiya h neche jo sare function hai mbl or desktop device k liye 
 

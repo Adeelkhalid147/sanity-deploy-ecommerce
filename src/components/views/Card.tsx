@@ -3,6 +3,7 @@ import { oneProductType } from "../utils/ProductsDataArrayAndType";
 import imageUrlBuilder from "@sanity/image-url"
 import Image from "next/image"
 import { client } from "../../../sanity/lib/client";
+import Link from "next/link"
 
 
 
@@ -15,9 +16,9 @@ function urlFor(source:any) {
 const Card: FC<{ singleProductData: oneProductType }> = ({singleProductData}) => {
   // console.log("image s : ", singleProductData.image);
   
-  
   return (
-  <div className="border-4 max-w-sm min-w-[24rem] space-y-3">
+    <Link href={singleProductData.slug}>
+  <div className="border-4 max-w-sm min-w-[24rem] space-y-3 hover:scale-125 duration-300">
     <div className="w-full relative">
       <div className="absolute inset-0"/>
       {/* inset-0 charo side se bilkul sth mila de ga  */}
@@ -28,6 +29,7 @@ const Card: FC<{ singleProductData: oneProductType }> = ({singleProductData}) =>
     <p>${singleProductData.price}</p>
     </div>
   </div>
+  </Link>
   )
 };
 
