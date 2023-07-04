@@ -3,7 +3,7 @@ import React from 'react'
 
 const Jewellery = () => {
   return (
-    <div className='px-1 bg-[#FBFCFF]'>
+    <div className='px-1'>
         {/* top */}
         
         <div className='text-3xl font-extrabold flex justify-start md:justify-end py-4'>
