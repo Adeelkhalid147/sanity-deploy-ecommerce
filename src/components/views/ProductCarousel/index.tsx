@@ -2,9 +2,7 @@
 import { oneProductType } from "@/components/utils/ProductsDataArrayAndType";
 import { FC, ReactNode, Component } from "react";
 import Card from "../Card";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+
 
 
 

@@ -4,6 +4,9 @@ import Image from "next/image";
 import BASE_PATH_FORAPI from "@/components/shared/Wrapper/BasePath";
 import ProductCarousel from "@/components/views/ProductCarousel";
 import { responseType } from "@/components/utils/ProductsDataArrayAndType";
+import Jewellery from "@/components/views/Jewellery";
+import NewsLatter from "@/components/views/NewsLatter";
+import Footer from "@/components/views/Footer";
 
 async function fetchAllProductsData() {
   let res = await fetch(
@@ -24,9 +27,12 @@ export default async function Home() {
   let { result }: responseType = await fetchAllProductsData();
   return (
     <div>
-      {/* <Hero />
-      <ProductType /> */}
+      <Hero/>
+      <ProductType />
       <ProductCarousel ProductData={result} />
+      <Jewellery/>
+      <NewsLatter/>
+      
     </div>
   );
 }

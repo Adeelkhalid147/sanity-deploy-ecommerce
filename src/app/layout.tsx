@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/views/Navbar'
 import { Sora } from 'next/font/google'
 import Wrapper from '@/components/shared/Wrapper'
+import Footer from '@/components/views/Footer'
 
 
 const inter = Sora({ subsets: ['latin'],
@@ -24,7 +25,8 @@ export default function RootLayout({
         <Wrapper>
         <Navbar/>
         
-        {children}
+        <div className='min-h-screen'>{children}</div>
+        <Footer/>
         </Wrapper>
         </body>
     </html>

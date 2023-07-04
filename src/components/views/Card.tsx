@@ -17,8 +17,8 @@ const Card: FC<{ singleProductData: oneProductType }> = ({singleProductData}) =>
   // console.log("image s : ", singleProductData.image);
   
   return (
-    <Link href={singleProductData.slug}>
-  <div className="border-4 max-w-sm min-w-[24rem] space-y-3 hover:scale-125 duration-300">
+    <Link href={`/catalog/${singleProductData.slug.current}`}>
+  <div className="border-4 max-w-sm min-w-[24rem] space-y-3 select-none  hover:scale-125 duration-300">
     <div className="w-full relative">
       <div className="absolute inset-0"/>
       {/* inset-0 charo side se bilkul sth mila de ga  */}
