@@ -15,7 +15,7 @@ const Products = async () => {
 
   return (
     <div>
-      {ProductData.productArray.length !== 0 && (
+      {Array.isArray(ProductData.productArray) && (
         <AllProductsCompo ProductData={ProductData} />
       )}
     </div>
