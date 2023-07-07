@@ -2,7 +2,7 @@ import React from 'react'
 
 const NewsLatter = () => {
   return (
-    <div className=' relative text-center space-y-4 h-[80vh] flex flex-col justify-center items-center'>
+    <div className=' relative text-center space-y-4 min-h-[40vh] md:h-[70vh] lg:min-h-[50rem] flex flex-col justify-center items-center'>
       
       
       <div className='absolute inset-0 -z-10 flex items-center justify-center'>
