@@ -11,11 +11,23 @@ import { NavbarArray,NavbaritemType } from '../../utils/NavbarArrayAndTypes'
 import Link from 'next/link'
 import DropDown from '../subComponents/DropDown';
 import Expand from '../subComponents/Expand'
+import { useRouter } from 'next/navigation'
 
 
 const Navbar = () => {
+    const router = useRouter()
     const [isNavbarOpen,setNavbarOpen]=useState<boolean>(false)
     const [cartitemNumber, setcartitemNumber]=useState<number>(0)
+    const [searchQuery, setSearchQuery] = useState("")
+
+    function handleSearchCalledFunc(e:any) {
+        // console.log(e.key,e.keyCode)
+        if (e.key === "Enter" && e.keyCode === 13){
+            router.push(`/search/${searchQuery}`)
+            // console.log("enter")
+        }
+    }
+
 
   return (
     <div className=' sticky top-0 bg-opacityDownColor z-50 backdrop-blur-lg'>
@@ -39,8 +51,8 @@ const Navbar = () => {
         ))}
     </div>
     <div className='border rounded-md flex items-center px-1 py-1'>
-        <CiSearch/>
-        <input type='text' placeholder='What you looking for' className='ml-1 outline-none text-xs w-60 flex-grow'/>
+        <Link href={`/search/${searchQuery}`}> <CiSearch/> </Link>
+        <input type='text' onKeyDown={handleSearchCalledFunc} value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} placeholder='What you looking for' className='ml-1 outline-none text-xs w-60 flex-grow'/>
     </div>
     <div className='flex-shrink bg-[#F1F1F1] relative rounded-full h-10 w-10 flex justify-center items-center'>
         <div className='absolute bg-[#F02D34] h-3 w-3 text-xs rounded-full flex justify-center items-center top-1 right-1'>
