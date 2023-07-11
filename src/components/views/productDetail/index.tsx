@@ -1,12 +1,14 @@
 "use client"
 import { imagesType, oneProductType } from '@/components/utils/ProductsDataArrayAndType'
 import React from 'react'
-import { FC, useState } from 'react';
+import { FC, useState,useContext } from 'react';
 import { client } from "../../../../sanity/lib/client";
-import { SanityClient } from 'sanity';
 import Image from 'next/image';
 import imageUrlBuilder from "@sanity/image-url"
 import { CgShoppingCart } from 'react-icons/cg';
+import { cartContext } from "../../../global/Context"
+import PortableText from 'react-portable-text';
+import toast, { Toaster } from 'react-hot-toast'
 
 
 
@@ -19,11 +21,15 @@ function urlFor(source:any) {
 }
 
 const ProductDetail: FC<{item:oneProductType}> = ({item}) => {
+    let {state, dispatch } = useContext(cartContext)
+    
     // usestate bnai h ta k image ko bri bri rander krwa k show krn
     const [imageForPreviewOfSelected,setImageForPreviewOfSelected] = useState<string>(item.image[0]._key)
     // use state for quantity
     const[quantity,setQuantity] = useState(1)
 
+
+    // button increment and decrement function
     function incrementTheQuantity (){
         setQuantity(quantity + 1)
     }
@@ -33,8 +39,30 @@ const ProductDetail: FC<{item:oneProductType}> = ({item}) => {
             setQuantity(quantity - 1)
         }
     }
+
+
+    // toaster ko install kr k ye function bnana h or jha use krna ho wha function ko call kr dena h
+const notification = (title:string) => toast(` ${quantity} ${title} added to Cart`,{
+    icon:'✔️',
+    duration:2000
+})
+
+
+
+    // Add to cart function
+function handleAddToCart(){
+    let dataToAddInCart={
+productId: item._id,
+quantity: quantity,
+}
+dispatch({payload:"addToCart",data:dataToAddInCart})
+notification(item.productName)
+}
+
   return (
-    <div className='flex flex-col lg:flex-row justify-center items-center'>
+    <div>
+        <Toaster />
+    <div className='flex flex-col lg:flex-row justify-center items-center py-7'>
 
         {/* left side main div  */}
         <div className='flex gap-x-4 md:gap-x-6'>
@@ -85,16 +113,48 @@ const ProductDetail: FC<{item:oneProductType}> = ({item}) => {
                     </div>
             </div>
             <div className='flex gap-x-4 items-center'>
-            <button className='text-white bg-black border border-gray-800 px-3 py-2 flex items-center'><CgShoppingCart size={25}/> &nbsp;&nbsp; Add to Cart</button>
+            <button onClick={()=>handleAddToCart()} className='text-white bg-black border border-gray-800 px-3 py-2 flex items-center'><CgShoppingCart size={25}/> &nbsp;&nbsp; Add to Cart</button>
             <p className='text-2xl font-bold'>$ {item.price}{".00"}</p>
             </div>
         </div>
+        </div>
+
+
+      <div>
+        <div className='relative py-12 px-2 border-b-2 border-gray-400'>
+        <h2 className='absolute top-0 -z-10 text-5xl md:text-9xl leading-[6rem] font-extrabold text-[#ECEDEF]'>Overview</h2>
+
+            <p className='font-semibold text-xl'>Product Information</p>
+        </div>
+        <div className='text-gray-600'>
+            <div className='flex px-2 py-4'>
+                <div className='w-80'>
+                <h3 className='font font-medium'>PRODUCT DETAILS</h3>
+                </div>
+                <p>
+                    <PortableText content = {item.description}/>
+                </p>
+            </div>
+
+
+            <div className='flex px-2 py-4'>
+                <div className='w-80'>
+                <h3 className='font font-medium'>PRODUCT CARE</h3>
+                </div>
+               <ul className='pl-3 font-semibold list-disc'>
+                <li>Hand wash using cold water.</li>
+                <li>Do not using bleach.</li>
+                <li>Hang it to dry.</li>
+                <li>Iron on low temperature.</li>
+               </ul>
+            </div>
+
+        </div>
+        </div>
+
+
     </div>
   )
 }
 
 export default ProductDetail
-
-function ImageUrlBuilderlder(client: SanityClient): any {
-    throw new Error('Function not implemented.');
-}
