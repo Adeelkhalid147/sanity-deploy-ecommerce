@@ -36,3 +36,8 @@ export default async function Home() {
     </div>
   );
 }
+
+
+
+// project id in firebase
+// e-commerce-1e98f
