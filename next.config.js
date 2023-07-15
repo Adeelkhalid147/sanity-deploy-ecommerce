@@ -14,6 +14,13 @@ const nextConfig = {
         port:"",
         pathname:"/**",
       },
+      {
+        protocol: "https",
+        hostname: "myportfolio-alpha-neon.vercel.app",
+        port:"",
+        pathname:"/**",
+      },
+       
     ],
   },
   

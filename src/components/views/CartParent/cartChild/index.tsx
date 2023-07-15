@@ -5,14 +5,8 @@ import { RiDeleteBinLine } from 'react-icons/ri'
 import { cartContext } from '@/global/Context'
 import { oneProductType } from '@/components/utils/ProductsDataArrayAndType'
 import AllProductsCompo from '../../AllProducts'
-import { client } from '../../../../../sanity/lib/client'
 
 
-const builder:any = imageUrlBuilder(client)
-
-function urlFor(source:any) {
-  return builder.image(source)
-}
 
 
 
@@ -49,7 +43,7 @@ const CartComp =  ({ allProductsOfStore }:{allProductsOfStore:Array<oneProductTy
   allProductsForCart.map((item:oneProductType,index:number)=>(
 <div key={index} className='flex flex-shrink-0 gap-6'>
   <div className='w-56 '>
-    <Image className='rounded-lg' src={urlFor(item.image[0]).width(1000).height(1000).url()} alt={item.image[0].alt} height={1000} width={1000} />
+    <Image className='rounded-lg' src={"/product1.png"} alt='Nothing' height={1000} width={1000} />
   </div>
 
   <div className='space-x-3 space-y-1 md:space-y-3 w-full'>
@@ -97,7 +91,3 @@ const CartComp =  ({ allProductsOfStore }:{allProductsOfStore:Array<oneProductTy
 }
 
 export default CartComp
-
-function imageUrlBuilder(client: any) {
-  throw new Error('Function not implemented.')
-}

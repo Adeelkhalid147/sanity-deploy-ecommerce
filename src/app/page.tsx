@@ -26,7 +26,7 @@ async function fetchAllProductsData() {
 export default async function Home() {
   let { result }: responseType = await fetchAllProductsData();
   return (
-    <div>
+    <div className="overflow-hidden">
       <Hero/>
       <ProductType />
       <ProductCarousel ProductData={result} />

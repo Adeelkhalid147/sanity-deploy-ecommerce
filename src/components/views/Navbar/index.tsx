@@ -32,7 +32,7 @@ const Navbar = () => {
 
   return (
     <ContextWrapper>
-    <div className=' sticky top-0 bg-opacityDownColor z-50 backdrop-blur-lg'>
+    <div className=' sticky top-0 bg-opacityDownColor z-20 backdrop-blur-lg'>
 <div className='py-8 flex justify-between items-center space-x-12'>
     <div className='w-36 flex-shrink-0'>
     <Image src={"/Logo.webp"} alt='logo' height={500} width={500}/>
