@@ -27,14 +27,16 @@ const SignupFormComp = () => {
     sendEmailVerificationCode,
   } = useContext(cartContext);
 
-  // useEffect(() => {
-  //     if (userData) {
-  //         window.location.href = "/"
-  //     }
+  useEffect(() => {
+      if (userData) {
+          window.location.href = "/"
+      }
   //     if (errorsOfFirebase.errorMessage.length > 0) {
   //         notificationError(errorsOfFirebase.errorMessage)
-  //     };
-  // }, [userData, errorsOfFirebase]);
+      // };
+  }
+  , [userData, errorsOfFirebase]
+  );
 
   const [formData, setFormData] = useState<SignupFormData>({
     fullName: "",
