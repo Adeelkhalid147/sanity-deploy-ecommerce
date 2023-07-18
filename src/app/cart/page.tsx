@@ -2,8 +2,6 @@ import CartComp from '@/components/views/CartParent/cartChild'
 import ContextWrapper from '@/global/Context'
 import React from 'react'
 
-
-
 export async function fatchAllStoreProducts(){
   let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`,{
     cache: "no-store",
@@ -11,13 +9,12 @@ export async function fatchAllStoreProducts(){
 return res.json()
 }
 
-
 const Cart =async () =>  {
   let allProductOfStore = await fatchAllStoreProducts();
   return (
-        
+        <ContextWrapper>
     <CartComp allProductsOfStore={allProductOfStore.result}/>
-    
+    </ContextWrapper>
   )
 }
 

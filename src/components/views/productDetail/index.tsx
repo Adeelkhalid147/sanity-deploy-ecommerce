@@ -21,12 +21,37 @@ function urlFor(source:any) {
 }
 
 const ProductDetail: FC<{item:oneProductType}> = ({item}) => {
-    let {state, dispatch } = useContext(cartContext)
+    let { cartArray, dispatch, userData } = useContext(cartContext)
     
     // usestate bnai h ta k image ko bri bri rander krwa k show krn
     const [imageForPreviewOfSelected,setImageForPreviewOfSelected] = useState<string>(item.image[0]._key)
     // use state for quantity
     const[quantity,setQuantity] = useState(1)
+
+
+
+     // Add to cart function
+function handleAddToCart(){
+let isExists = cartArray.some((elem:any) => elem.product_id === item._id)
+if (userData) {
+let dataToAddInCart={
+product_id: item._id,
+quantity: quantity,
+user_id: userData.uuid,
+price:item.price,
+}
+if (!isExists) {
+    dispatch("addToCart",dataToAddInCart)
+} else {
+    dispatch("updateCart",dataToAddInCart)
+}
+notification(item.productName)
+}else{
+notificationError("Please login first")
+}
+}
+
+
 
 
     // button increment and decrement function
@@ -42,22 +67,18 @@ const ProductDetail: FC<{item:oneProductType}> = ({item}) => {
 
 
     // toaster ko install kr k ye function bnana h or jha use krna ho wha function ko call kr dena h
-const notification = (title:string) => toast(` ${quantity} ${title} added to Cart`,{
+const notification = (title:string) => { toast(` ${quantity} ${title} added to Cart`,{
     icon:'✔️',
-    duration:2000
+    duration:2000,
+    // position: "top-right"
 })
-
-
-
-    // Add to cart function
-function handleAddToCart(){
-    let dataToAddInCart={
-productId: item._id,
-quantity: quantity,
 }
-dispatch({payload:"addToCart",data:dataToAddInCart})
-notification(item.productName)
+const notificationError = (title:string) =>{ toast(title,{
+    position: "top-center"
+})
 }
+
+
 
   return (
     <div>

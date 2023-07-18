@@ -4,6 +4,8 @@ import { cartReducer } from "../reducer";
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import BASE_PATH_FORAPI from '@/components/shared/Wrapper/BasePath';
+import { basename } from 'path';
 
 
 
@@ -28,27 +30,60 @@ const ContextWrapper = ({ children }:{children:ReactNode}) => {
     const [userData, setUserData] = useState<any>()
     const [errorViaUserCredential,setErrorViaUserCredential] = useState< indexForError | "">("")
     const [loading,setLoading] = useState(false)
-    /*
-    iniatizilerOfCart ye object as liye bnya h ta k kal ko hm user k detail store kr saken
-    */
-    const iniatizilerOfCart = {
-        cart:[],
+    const [cartArray, setCartArray] = useState<any>([])
+    const [errorsOfFirebase, setErrorsOfFirebase] = useState({
+        key:"",
+        errorMessage:"",
+    })
+
+
+    async function fetchApiForAllCartItems(){
+        let res =await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`)
+        if(!res.ok){
+            throw new Error("Failed to Fetch")
+        }
+        let dataToreturn = await res.json()
+        setCartArray((prev:any)=>dataToreturn.allCartData)
+        if(dataToreturn) {
+        return true
+        }
     }
-const [state,dispatch] = useReducer(cartReducer,iniatizilerOfCart)
-useEffect(()=>{
-    let cart = localStorage.getItem("cart") as string
-    if (cart === null) {
-        localStorage.setItem("cart", JSON.stringify(state.cart))
-    } else {
-        iniatizilerOfCart.cart = JSON.parse(cart)
+
+
+    useEffect(() => {
+      fetchApiForAllCartItems()
+    }, [])
+
+    async function dispatch(payLoad:string,data:any){
+        if (payLoad === "addToCart"){
+          await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`,{
+                method:"POST",
+                body:JSON.stringify(data)
+            })
+        } else if(payLoad === "RemoveFromCart"){
+            let dataa = await fetch(`${BASE_PATH_FORAPI}/api/cartfunc?product_id=${data.product_id}&user_id=${data.user_id} `,{
+                method:"DELETE",
+             })
+
+             let NotData =await dataa.json()
+        } else if(payLoad === "updateCart"){
+            setLoading(true)
+            let dataa = await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`,{
+                method:"PUT",
+                body:JSON.stringify(data)
+             })
+             
+             let NotData =await dataa.json()
+             setLoading(false)
+        }
+        let resp = await fetchApiForAllCartItems()
+        if(resp) {
+        return "success"
+        } else{
+            return "un-success"
+        }
     }
-})
-
-useEffect(() =>{
-    localStorage.setItem("cart", JSON.stringify(state.cart))
-}, [state.cart])
-
-
+    
 
 
 /*
@@ -103,11 +138,16 @@ function signUpViaGoogle(){
 
 function signUpUser(email:string,password:string){
     setLoading(true)
-    return createUserWithEmailAndPassword(auth,email,password).then((res:any) =>{
+   createUserWithEmailAndPassword(auth,email,password).then((res:any) =>{
         setLoading(false)
         router.push("/")
     }).catch((res:any)=>{
-        console.log("error: " ,res)
+        let error = res.code.split("/")
+        error = error[error.length - 1]
+        setErrorsOfFirebase({
+            key: "signup",
+            errorMessage:error
+        })
         setLoading(false)
     })
     setLoading(false)
@@ -115,11 +155,14 @@ function signUpUser(email:string,password:string){
 
 function signInUser(email:string,password:string){
     setLoading(true)
-   return signInWithEmailAndPassword(auth,email,password).then((res:any) =>{
+   signInWithEmailAndPassword(auth,email,password).then((res:any) =>{
     setLoading(false)
-}).catch((res:any)=>{
-    setErrorViaUserCredential({
-        "signInError" : "Error occured via signin with email and password"
+    }).catch((res:any)=>{
+    let error = res.code.split("/")
+    error = error[error.length - 1]
+    setErrorsOfFirebase({
+        key: "signin",
+        errorMessage:error
     })
 })
 setLoading(false)
@@ -161,7 +204,7 @@ function sendEmailVerificationCode(){
 
     return (
     // as mai do cheze hai value provider or value consume yha hm provider use kren gy
-    <cartContext.Provider value={{ state, dispatch, sendEmailVerificationCode,updateUserNamePhoto, signUpUser, signUpViaGoogle, userData, LogOut,loading, signInUser }}>
+    <cartContext.Provider value={{ cartArray, errorsOfFirebase, dispatch, sendEmailVerificationCode,updateUserNamePhoto, signUpUser, signUpViaGoogle, userData, LogOut,loading, signInUser }}>
         {children}
     </cartContext.Provider>
   )

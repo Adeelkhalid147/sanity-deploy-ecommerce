@@ -7,7 +7,8 @@ import { drizzle } from "drizzle-orm/vercel-postgres";
 export const cartTableDrizzle = pgTable("ccart",{
     product_id:varchar("product_id", {length:255}).notNull(),
     quantity:integer("quantity"),
-    user_id: varchar("user_id", { length:255 }).notNull()
+    user_id: varchar("user_id", { length:255 }).notNull(),
+    price:integer("price"),
 })
 
 

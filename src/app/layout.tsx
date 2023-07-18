@@ -29,14 +29,14 @@ export default function RootLayout({
         <div className='overflow-hidden w-screen'>
           <TopLabel/>
           </div>
-        {/* <Wrapper> */}
-          {/* <ContextWrapper> */}
-            {/* <SignupFormComp/> */}
-          {/* </ContextWrapper> */}
-        {/* <Navbar/> */}
+        <Wrapper>
+          {/* <ContextWrapper>
+            <SignupFormComp/>
+          </ContextWrapper> */}
+        <Navbar/>
         <div className='min-h-screen'>{children}</div>
-        {/* <Footer/> */}
-        {/* </Wrapper> */}
+        <Footer/>
+        </Wrapper>
         </body>
     </html>
   )

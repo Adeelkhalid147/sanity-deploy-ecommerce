@@ -6,15 +6,16 @@ import { ImGoogle } from 'react-icons/im';
 
 const notificationError = (title: string) => {
   toast(title, {
-    position: "top-right"
+    position: "top-center"
   })
 };
+
+
 
 const SignInForm = () => {
   let { signUpViaGoogle, userData, signInUser, loading, errorsOfFirebase } = useContext(cartContext)
   const [formData, setFormData] = useState({ email: '', password: '' });
-
-
+  
   useEffect(() => {
     if (userData) {
       window.location.href = "/"
@@ -73,6 +74,10 @@ const SignInForm = () => {
             SignIn With Google
           </button>
         </div>
+
+
+
+        
         <button
           disabled={loading}
           className="bg-purple-700 text-white rounded-md py-2 px-4 font-medium"
