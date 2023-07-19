@@ -12,7 +12,7 @@ useEffect(()=>{
   if(cartArray.length !== 0) {
   setQuantity(cartArray.length)
   }
-},[])
+},[cartArray])
 
   return (
   <Link href={"/cart"} className='flex-shrink bg-[#F1F1F1] relative rounded-full h-10 w-10 flex justify-center items-center'>

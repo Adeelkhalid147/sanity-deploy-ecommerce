@@ -9,7 +9,7 @@ function checkerAndReturner(orgnalData:any, newData:any){
 
 
 export function cartReducer(state:any,action:any) {
-    if(action.payload === "addToCart"){
+    if(action.payLoad === "addToCart"){
         let response = checkerAndReturner(state.cart,action.data)
         if(!response) {
     return {
@@ -21,9 +21,9 @@ export function cartReducer(state:any,action:any) {
         cart: [...dataToStoreAgain,action.data]
     }
 }
-}else if(action.payload === "removeToCart"){
+}else if(action.payLoad === "removeToCart"){
     return ""
-} else if(action.payload === "updateToCart"){
+} else if(action.payLoad === "updateToCart"){
 return state
 }
 return state

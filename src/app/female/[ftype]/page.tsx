@@ -1,6 +1,5 @@
 import { oneProductType, responseType } from '@/components/utils/ProductsDataArrayAndType';
 import Card from '@/components/views/Card';
-import React, { FC } from 'react'
 
 
 

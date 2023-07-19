@@ -4,8 +4,6 @@ import { cartReducer } from "../reducer";
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import BASE_PATH_FORAPI from '@/components/shared/Wrapper/BasePath';
-import { basename } from 'path';
 
 
 
@@ -36,39 +34,48 @@ const ContextWrapper = ({ children }:{children:ReactNode}) => {
         errorMessage:"",
     })
 
+    const [quantity,setQuantity] = useState(0)
+
+    useEffect(()=>{
+        if (cartArray.length !==0){
+            setQuantity(cartArray.length)
+        }
+    },[cartArray])
+
 
     async function fetchApiForAllCartItems(){
-        let res =await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`)
+        if(userData){
+        let res = await fetch(`/api/cartfunc?user_id=${userData.uuid}`)
         if(!res.ok){
             throw new Error("Failed to Fetch")
         }
         let dataToreturn = await res.json()
-        setCartArray((prev:any)=>dataToreturn.allCartData)
+        await setCartArray((prev:any)=>dataToreturn.allCartData)
+        router.refresh()
         if(dataToreturn) {
         return true
         }
     }
-
-
-    useEffect(() => {
-      fetchApiForAllCartItems()
-    }, [])
+    }
+    useEffect(()=>{
+        fetchApiForAllCartItems()
+    },[userData])
 
     async function dispatch(payLoad:string,data:any){
         if (payLoad === "addToCart"){
-          await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`,{
+          await fetch(`/api/cartfunc`,{
                 method:"POST",
                 body:JSON.stringify(data)
             })
         } else if(payLoad === "RemoveFromCart"){
-            let dataa = await fetch(`${BASE_PATH_FORAPI}/api/cartfunc?product_id=${data.product_id}&user_id=${data.user_id} `,{
+            let dataa = await fetch(`/api/cartfunc?product_id=${data.product_id}&user_id=${data.user_id} `,{
                 method:"DELETE",
              })
 
              let NotData =await dataa.json()
         } else if(payLoad === "updateCart"){
             setLoading(true)
-            let dataa = await fetch(`${BASE_PATH_FORAPI}/api/cartfunc`,{
+            let dataa = await fetch(`/api/cartfunc`,{
                 method:"PUT",
                 body:JSON.stringify(data)
              })
@@ -117,7 +124,7 @@ let provider = new GoogleAuthProvider()
 
 function signUpViaGoogle(){
     setLoading(true)
-    signInWithPopup(auth,provider).then((userData:any)=>{
+    return signInWithPopup(auth,provider).then((userData:any)=>{
         if(userData){
             setUserData({
                 displayName:userData.user.displayName,
@@ -195,6 +202,7 @@ function sendEmailVerificationCode(){
             displayName: userName , photoURL: "https://myportfolio-alpha-neon.vercel.app/_next/image?url=%2Fadeel.jpeg&w=828&q=75"
           }).then(() => {
            setLoading(false)
+           window.location.reload()
           }).catch((error:any) => {
             setLoading(false)
           });
@@ -204,7 +212,7 @@ function sendEmailVerificationCode(){
 
     return (
     // as mai do cheze hai value provider or value consume yha hm provider use kren gy
-    <cartContext.Provider value={{ cartArray, errorsOfFirebase, dispatch, sendEmailVerificationCode,updateUserNamePhoto, signUpUser, signUpViaGoogle, userData, LogOut,loading, signInUser }}>
+    <cartContext.Provider value={{ cartArray, errorsOfFirebase, dispatch, sendEmailVerificationCode,updateUserNamePhoto, signUpUser, signUpViaGoogle, userData, LogOut,loading, signInUser, quantity, setQuantity }}>
         {children}
     </cartContext.Provider>
   )

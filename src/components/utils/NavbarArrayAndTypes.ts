@@ -40,25 +40,25 @@ export const NavbarArray: Array<NavbaritemType> = [
   },
   {
     label: "Male",
-    href: "/male",
+    href: "/male/Male",
     isDropDown: true,
     dropDownData: [
       {
         label: "Sweaters",
-        href: "/Male/Sweater",
+        href: "/male/Sweater",
         isDropDown: false,
       },
 
       {
         label: "Jackets",
-        href: "/Male/Jacket",
+        href: "/male/Jacket",
         isDropDown: false,
       },
     ],
   },
   {
     label: "Kids",
-    href: "/kids",
+    href: "/kid",
     isDropDown: false,
   },
   {

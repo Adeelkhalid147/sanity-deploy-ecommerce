@@ -9,13 +9,14 @@ import imageUrlBuilder from "@sanity/image-url"
 import { client } from '../../../../../sanity/lib/client';
 import { Toaster, toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation"
+import BASE_PATH_FORAPI from '@/components/shared/Wrapper/BasePath';
+import LoadingComp from '@/components/shared/LoadingComp';
 
 
 
 
 
 const builder:any = imageUrlBuilder(client)
-
 function urlFor(source:any) {
   return builder.image(source)
 }
@@ -28,30 +29,30 @@ const notificationError = (title:string) =>{ toast(title,{
 
 
 const CartComp =  ({ allProductsOfStore }:{allProductsOfStore:Array<oneProductType> }) => {
+  const [loadings,setLoadings] = useState<boolean>(false)
   const [allProductsForCart, setAllProductsForCart] = useState<any>()
-  let { userData, cartArray, dispatch, loading } = useContext(cartContext)
+  let { userData, cartArray, dispatch, loading, setLoading } = useContext(cartContext)
   const [totalPrice,setTotalPrice] = useState(0)
-  const [allowedToAdd, setAllowedToAdd] = useState(true)
+  let router = useRouter()
+  
+  function PriceSubTotal () {
+    let orignalToSend:number = 0
+    allProductsForCart && allProductsForCart.forEach((element:oneProductType) =>{
+      let subTotalPrice = element.quantity * element.price
+      orignalToSend = orignalToSend + subTotalPrice
+    })
+      if (orignalToSend !== 0){
+        setTotalPrice(orignalToSend)
+        router.refresh()
+      }
+      
+    } 
+    useEffect(()=>{
+      PriceSubTotal()
+    },[allProductsForCart])
   
 
 
-  function PriceSubTotal () {
-    for (let index = 0; index < cartArray.length; index++) {
-      
-      const element = cartArray[index];
-      let subTotalPrice = element.quantity * element.price
-          if (subTotalPrice) {
-          setTotalPrice(totalPrice + subTotalPrice)
-        }
-      
-    }
-  }
-
-if(cartArray.length !== 0) {
-  if(allowedToAdd){
-    PriceSubTotal()
-  }
-}
 
   function handleRemove(product_id:string){
     if(userData) {
@@ -60,21 +61,31 @@ if(cartArray.length !== 0) {
   }
 }
     useEffect(() => {
-          if (cartArray.length !== 0) {
+          if (cartArray) {
         let data = allProductsOfStore.filter((item:oneProductType) => {
           for (let index=0; index < cartArray.length ; index++) {
             let element:any = cartArray[index]
-            if (element.product_id === item._id) {
+            if (element.product_id === item._id && element.user_id === userData.uuid) {
               return true
             }
           }
         })
-        setAllProductsForCart(data)
         
-      }
-      
-
-    },[cartArray])
+        let updatedData = data.map((elem: oneProductType) => {
+          for (let index = 0; index < cartArray.length; index++){
+            let element:any = cartArray[index]
+            if (element.product_id === elem._id){
+              return{
+                ...elem,
+                quantity:element.quantity,
+              }
+            }
+          }
+        })
+        
+      setAllProductsForCart(updatedData)
+          }
+        },[cartArray])
 
 
     async function handleIncrementByOne(product_id:string,price:any) {
@@ -84,8 +95,7 @@ if(cartArray.length !== 0) {
           stableQuantity = element.quantity
         }
       });
-      await dispatch("updateCart",{
-        
+      let returnedVal = await dispatch("updateCart",{
           product_id: product_id,
           quantity: stableQuantity + 1,
           user_id: userData.uuid,
@@ -93,8 +103,6 @@ if(cartArray.length !== 0) {
           
         })
         notificationError("Incremented by One")
-       
-        PriceSubTotal()
       }
       
 
@@ -105,7 +113,7 @@ if(cartArray.length !== 0) {
           stableQuantity = element.quantity
         }
       });
-      if (stableQuantity - 1 <= 1) {
+      if (stableQuantity - 1 <= 0) {
         notificationError("Did not accept lower then 1")
 
       }else{
@@ -117,11 +125,21 @@ if(cartArray.length !== 0) {
       })
       notificationError("Decremented by One")
     }
-      PriceSubTotal()
     }
+
+    async function handleProcessCheckout() {
+      setLoadings(true)
+      let linkOrg:any = await fetch(`/api/checkout_sessions`,{
+        method:"POST",
+        body:JSON.stringify(allProductsForCart)
+      })
+      if(linkOrg) {
+      let { link } = await linkOrg.json()
+      window.location.href = link
+    }
+    setLoading(false)
+  }
         
-      
-    
   return (
     <div className='py-10 px-4 md:px-10'>
       <Toaster/>
@@ -136,7 +154,8 @@ if(cartArray.length !== 0) {
 
 <div className='flex flex-col basis-[69%] gap-2'>
 
-{allProductsForCart && allProductsForCart.map((item:oneProductType,index:number)=>(
+{allProductsForCart ? allProductsForCart.map((item:oneProductType,index:number)=>{
+  return (
 <div key={index} className='flex flex-shrink-0 gap-6'>
   <div className='w-56 '>
     <Image className='rounded-lg' src={urlFor(item.image[0]).width(1000).height(1000).url()} alt={item.image[0].alt} height={1000} width={1000} />
@@ -145,7 +164,7 @@ if(cartArray.length !== 0) {
   <div className='space-x-3 space-y-1 md:space-y-3 w-full'>
     <div className='flex justify-between'>
       <h2 className='md:text-xl text-gray-700 font-light'>{item.productName}</h2>
-      {loading ? <LoadingComp size={"w-10"}/>:
+      {loading ? <LoadingComp size={"w-7"}/>:
      <div className='cursor-pointer' onClick={() => handleRemove(item._id)}>
       <RiDeleteBinLine size={25}/>
       </div>
@@ -163,21 +182,7 @@ if(cartArray.length !== 0) {
         >
           -
           </button>
-          <p>
-            {
-            cartArray.map((subItem:any) => {
-              let matching = subItem.product_id === item._id
-              let quantity = subItem.quantity
-              
-              
-              if(matching){
-                return quantity
-              } else {
-                return ""
-              }
-            })
-            }
-          </p>
+          <p>{item.quantity}</p>
           <button
           onClick={() => handleIncrementByOne(item._id,item.price)}
           disabled={loading}
@@ -190,8 +195,31 @@ if(cartArray.length !== 0) {
   </div>
 </div>
 )
-))
+}) :
+!userData ? (
+  <div className="text-center font-semibold text-gray-800 text-xl">Please login First</div>
+) :
+  arrayForLoading.map((index: number) => (
+      <div key={index} className="border border-blue-300 shadow rounded-md p-4 w-full mx-auto">
+          <div className="flex animate-pulse gap-4">
+              <div className="bg-slate-200 rounded-lg h-32 w-4/12"></div>
+              <div className="flex-1 space-y-6 py-1">
+                  <div className="grid grid-cols-3 gap-4">
+                      <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                      <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                  </div>
+                  <div className="space-y-3">
+                      <div className="h-2 bg-slate-200 rounded"></div>
+                      <div className="h-2 bg-slate-200 rounded"></div>
+                  </div>
+                  <div className="h-8 w-16 bg-slate-200 rounded"></div>
+              </div>
+          </div>
+      </div>
+  ))
+}
 </div>
+
 
 
 
@@ -206,7 +234,13 @@ if(cartArray.length !== 0) {
     <p className='text-lg font-light'>Subtotal:</p>
     <p className=''>${totalPrice}</p>
   </div>
-  <button className='text-white bg-black border border-gray-800 font-bold px-4 py-1 w-full'>Process to Checkout</button>
+  <button 
+  onClick={handleProcessCheckout}
+  className='text-white bg-black border border-gray-800 font-bold px-4 py-1 w-full'>
+    { loadings ? "Loading..." :
+    "Process to Checkout"
+    }
+    </button>
 
 </div>
 </div>
@@ -216,3 +250,5 @@ if(cartArray.length !== 0) {
 }
 
 export default CartComp
+
+let arrayForLoading = [1, 2, 3, 4]

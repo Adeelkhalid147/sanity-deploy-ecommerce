@@ -3,7 +3,6 @@ import BASE_PATH_FORAPI from '@/components/shared/Wrapper/BasePath'
 import ContextWrapper from '../../../global/Context'
 import { responseType, oneProductType } from '@/components/utils/ProductsDataArrayAndType'
 import ProductDetail from "@/components/views/productDetail"
-import React from 'react'
 import { FC } from "react"
 import { Metadata } from 'next'
 
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }:{params: { slug:string }}) {
   }
 }
 
-// fetch data of droduct using slug
+// fetch data of product using slug
 async function fetchPreviewData(slug:string) {
   let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*%5B_type+%3D%3D+%22products%22+%26%26+slug.current+%3D%3D+%22${slug}%22%5D`)
   return res.json()
@@ -31,15 +30,19 @@ async function fetchPreviewData(slug:string) {
 
 
 /*
-multiple page bnane k liye genrateStaticParams ye function bnya h or return mai array
+multiple page bnane k liye getStaticProps (genrateStaticParams) ye function bnya h or return mai array
 lga k object mai jo slug likha h wo page ka name h catalog\[slug].  {slug: "american"}
 jitni dfa ye likhen gy uthne page bnyn g. jha jha b slug likha h wo as liye k folder 
 mai page ka name slug h 
  */
-export async function genrateStaticParams(){
-  let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`).then((res:any) => res.json())
-console.log("Res:", res)
-return res.result.map((item:oneProductType)=>{ slug: item.slug})
+export async function getStaticProps(){
+  let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`,{
+    next: {
+      revalidate:60
+    }
+  }).then((res:any) => res.json())
+// console.log("Res:", res)
+return res.result.map((item:oneProductType) => { slug:item.slug})
    
 }
 
