@@ -186,7 +186,7 @@ function sendEmailVerificationCode(){
     setLoading(true)
     if(user){
         sendEmailVerification(user).then((res:any)=>{
-            console.log("sended")
+            // console.log("sended")
             window.location.href = "/"
 
         })

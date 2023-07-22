@@ -36,16 +36,32 @@ lga k object mai jo slug likha h wo page ka name h catalog\[slug].  {slug: "amer
 jitni dfa ye likhen gy uthne page bnyn g. jha jha b slug likha h wo as liye k folder 
 mai page ka name slug h 
  */
-export async function genrateStaticParams(){
-  let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`,{
-    next: {
-      revalidate:60
-    }
-  }).then((res:any) => res.json())
-// console.log("Res:", res)
-return res.result.map((item:oneProductType) => { slug:item.slug})
+// export async function generateStaticParams(){
+//   let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`,{
+//     next: {
+//       revalidate:60
+//     }
+//   }).then((res:any) => res.json())
+// // console.log("Res:", res)
+// return res.result.map((item:oneProductType) => { slug:item.slug})
    
+// }
+
+
+
+
+
+export async function generateStaticParams() {
+  const data = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`).then((res:any) => res.json())
+
+  return data.map((item: any) => ({
+    slug: item.slug.current,
+  }));
 }
+
+
+
+
 
 
 
