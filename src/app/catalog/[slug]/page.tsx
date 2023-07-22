@@ -7,6 +7,7 @@ import { FC } from "react"
 import { Metadata } from 'next'
 
 
+
 // browser k top pe jo product open ho us ka name show krne k liye generateMetadata ye function 
 export async function generateMetadata({ params }:{params: { slug:string }}) {
   // read route params
@@ -35,7 +36,7 @@ lga k object mai jo slug likha h wo page ka name h catalog\[slug].  {slug: "amer
 jitni dfa ye likhen gy uthne page bnyn g. jha jha b slug likha h wo as liye k folder 
 mai page ka name slug h 
  */
-export async function getStaticProps(){
+export async function genrateStaticParams(){
   let res = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`,{
     next: {
       revalidate:60
@@ -45,6 +46,7 @@ export async function getStaticProps(){
 return res.result.map((item:oneProductType) => { slug:item.slug})
    
 }
+
 
 
 const Catalog = async ({ params }:{params:{slug:string} }) => {

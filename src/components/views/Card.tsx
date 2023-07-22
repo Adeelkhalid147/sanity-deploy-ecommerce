@@ -35,7 +35,7 @@ const Card: FC<{ singleProductData: oneProductType }> = ({singleProductData}) =>
 
 export default Card;
 
-
+// react slick slider se slider bnta h jis se image move hti h left or right dono trf
 
 
 
