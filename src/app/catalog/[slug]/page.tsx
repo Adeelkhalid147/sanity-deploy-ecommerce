@@ -52,7 +52,7 @@ mai page ka name slug h
 
 
 export async function generateStaticParams() {
-  const data = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`).then((res:any) => res.json())
+  const data = await fetch(`https://ezi31s7j.api.sanity.io/v2023-06-30/data/query/production?query=*[_type == 'products']`).then((res:any) => res)
 
   return data.map((item: any) => ({
     slug: item.slug.current,
