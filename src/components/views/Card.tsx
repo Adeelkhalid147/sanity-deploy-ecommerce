@@ -4,6 +4,8 @@ import imageUrlBuilder from "@sanity/image-url"
 import Image from "next/image"
 import { client } from "../../../sanity/lib/client";
 import Link from "next/link"
+import Slider from "react-slick"
+
 
 
 
