@@ -61,7 +61,7 @@ const ProductType = () => {
             />
           </div>
         </div>
-        // this is from fahad
+        {/* // this is from fahad */}
         {/* div 4 text */}
         <div className="w-full py-9 bg-cat2 col-auto md:col-span-2 flex flex-col justify-center items-center text-white space-y-3">
           <h3 className="font-extrabold text-4xl">GET 30% Off</h3>
