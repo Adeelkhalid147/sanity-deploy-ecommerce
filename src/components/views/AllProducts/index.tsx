@@ -51,7 +51,7 @@ export default class AllProductsCompo extends Component<{
         dataLength={this.state.items.length}
         //This is important field to render the next data
         next={this.getData}
-        hasMore={this.state.hasMore}
+        hasMore={this.state.hasMore} 
         loader={<h4>Loading...</h4>}
         endMessage={
           <p style={{ textAlign: "center" }}>
