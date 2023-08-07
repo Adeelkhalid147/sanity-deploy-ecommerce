@@ -8,7 +8,7 @@ async function fatchAllStoreProducts(){
   })
 return res.json()
 }
-
+  
 const Cart =async () =>  {
   let allProductOfStore = await fatchAllStoreProducts();
   return (
