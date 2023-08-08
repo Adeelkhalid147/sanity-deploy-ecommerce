@@ -14,6 +14,7 @@ originalData.push(...dataFrom_API.result)
 if (url.has("start") || url.has("end")) {
     if(originalData[Number(url.get("start"))]){
         let productArray = originalData.slice(Number(url.get("start")), Number(url.get("end")))
+        console.log("hello world :",productArray)
         return NextResponse.json({productArray})
     }
     
