@@ -18,7 +18,7 @@ async function fetchAllProductData() {
 
 const Products = async () => {
   const ProductData = await fetchAllProductData();
-  console.log("error: ", ProductData, Array.isArray(ProductData.productArray));
+  // console.log("error: ", ProductData, Array.isArray(ProductData.productArray));
   return (
     <div>
       {Array.isArray(ProductData.productArray) && (

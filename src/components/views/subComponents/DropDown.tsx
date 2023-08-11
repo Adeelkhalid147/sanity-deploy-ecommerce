@@ -1,7 +1,6 @@
 import React from 'react'
 import { FC } from 'react';
 import Link from 'next/link'
-
 import { NavbaritemType } from '@/components/utils/NavbarArrayAndTypes';
 
 const DropDown:FC<{item: NavbaritemType}> = ({item}) => {

@@ -45,13 +45,16 @@ const Navbar = () => {
                 <Link href={item.href}>{item.label}</Link>
                 {item.isDropDown ? <HiOutlineChevronDown className='rotate-180 mt-1 group-hover:rotate-0 duration-300' size={12}  />:""}
 
-                {item.isDropDown && <div className='invisible group-hover:visible py-2 px-6 font-light min-w-[7rem] bg-[#F1F1F1] left-0 absolute top-8'>
+                {item.isDropDown &&
+                <div className='invisible group-hover:visible py-2 px-6 font-light min-w-[7rem] bg-[#F1F1F1] left-0 absolute top-8'>
                 <DropDown item={item}/>
                 </div>}
             </li>
             </ul>
         ))}
     </div>
+
+    
     <div className='border rounded-md flex items-center px-1 py-1'>
         <Link href={`/search/${searchQuery}`}> <CiSearch/> </Link>
         <input type='text' onKeyDown={handleSearchCalledFunc} value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} placeholder='What you looking for' className='ml-1 outline-none text-xs w-60 flex-grow'/>
